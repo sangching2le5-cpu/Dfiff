@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第七课 – 你吃什么？| Bài 7: Bạn ăn gì? - HSK 1</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Noto Sans SC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelOrange: '#FFB875',
+                        lightOrange: '#FFF0DF',
+                        pastelBlue: '#A9C9F5',
+                        lightBlue: '#EAF3FF',
+                        bgMain: '#F8FAFD',
+                        textMain: '#26364A',
+                        textSub: '#718096',
+                        successGreen: '#35A879',
+                        errorRed: '#E56B6F'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+                        chinese: ['Noto Sans SC', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(169, 201, 245, 0.25), 0 8px 10px -6px rgba(255, 184, 117, 0.15);
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8FAFD;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A9C9F5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFB875;
+        }
+    </style>
+</head>
+<body class="bg-bgMain text-textMain font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-pastelBlue/40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('overview')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pastelOrange to-amber-200 flex items-center justify-center text-white shadow-md font-bold text-lg">
+                        中
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base sm:text-lg text-textMain leading-tight">第七课 – 你吃什么？</h1>
+                        <p class="text-xs text-textSub">HSK 1 • Giáo trình Hán ngữ</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <button onclick="switchTab('overview')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50 active" data-tab="overview">Tổng quan</button>
+                    <button onclick="switchTab('dialogue')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="dialogue">Bài khóa</button>
+                    <button onclick="switchTab('vocab')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="vocab">Từ vựng</button>
+                    <button onclick="switchTab('grammar')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="grammar">Ngữ pháp</button>
+                    <button onclick="switchTab('phonetics')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="phonetics">Ngữ âm</button>
+                    <button onclick="switchTab('exercises')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="exercises">Bài tập</button>
+                    <button onclick="switchTab('summary')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-textSub hover:text-textMain hover:bg-lightBlue/50" data-tab="summary">Tổng kết</button>
+                </nav>
+
+                <!-- Right Actions: Progress & Mobile Menu Toggle -->
+                <div class="flex items-center space-x-3">
+                    <div class="hidden sm:flex items-center bg-lightOrange px-3 py-1.5 rounded-full text-xs font-semibold text-amber-800 border border-pastelOrange/40">
+                        <i class="fa-solid fa-trophy text-pastelOrange mr-1.5"></i>
+                        <span id="global-progress-text">Tiến độ: 0%</span>
+                    </div>
+                    <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-textSub hover:text-textMain hover:bg-lightBlue/50 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-pastelBlue/40 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+            <button onclick="switchTab('overview'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Tổng quan</button>
+            <button onclick="switchTab('dialogue'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Bài khóa</button>
+            <button onclick="switchTab('vocab'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Từ vựng</button>
+            <button onclick="switchTab('grammar'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Ngữ pháp</button>
+            <button onclick="switchTab('phonetics'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Ngữ âm</button>
+            <button onclick="switchTab('exercises'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Bài tập</button>
+            <button onclick="switchTab('summary'); toggleMobileMenu();" class="mobile-nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-textSub hover:bg-lightBlue/50">Tổng kết</button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ================= 1. TAB: OVERVIEW ================= -->
+        <section id="tab-overview" class="tab-content space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-lightOrange via-white to-lightBlue rounded-3xl p-8 sm:p-12 card-shadow border border-pastelBlue/30">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-pastelOrange/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-10 -top-10 w-64 h-64 bg-pastelBlue/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-pastelOrange text-white mb-4 shadow-sm">
+                        <i class="fa-solid fa-book-open mr-1.5"></i> HSK 1 - Bài 7
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-textMain tracking-tight mb-3">
+                        第七课 – 你吃什么？
+                    </h2>
+                    <p class="text-xl sm:text-2xl font-semibold text-amber-700 mb-4">
+                        BÀI 7: BẠN ĂN GÌ?
+                    </p>
+                    <p class="text-textSub text-sm sm:text-base leading-relaxed mb-8">
+                        Chào mừng bạn đến với bài học thứ 7 trong giáo trình Hán ngữ 1. Trong bài này, bạn sẽ học cách hỏi và trả lời về món ăn, đồ uống, số lượng tại nhà ăn, cũng như nắm vững các cấu trúc ngữ pháp quan trọng và quy tắc biến điệu.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="switchTab('dialogue'); markSectionCompleted('overview');" class="px-6 py-3 bg-pastelOrange hover:bg-amber-500 text-white font-semibold rounded-2xl shadow-md transition transform hover:-translate-y-0.5 flex items-center">
+                            <i class="fa-solid fa-play mr-2"></i> BẮT ĐẦU HỌC
+                        </button>
+                        <button onclick="switchTab('vocab')" class="px-6 py-3 bg-white hover:bg-lightBlue/30 text-textMain font-semibold rounded-2xl border border-pastelBlue/60 shadow-sm transition flex items-center">
+                            <i class="fa-solid fa-list mr-2 text-pastelOrange"></i> Xem Từ Vựng (16 từ)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats & Highlights Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl card-shadow border border-pastelBlue/20 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-lightOrange flex items-center justify-center text-pastelOrange text-xl">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-textSub font-medium">Trình độ</p>
+                        <p class="text-lg font-bold text-textMain">HSK 1 - Sơ cấp</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl card-shadow border border-pastelBlue/20 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-lightBlue flex items-center justify-center text-blue-500 text-xl">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-textSub font-medium">Chủ đề</p>
+                        <p class="text-lg font-bold text-textMain">Ẩm thực & Nhà ăn</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl card-shadow border border-pastelBlue/20 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 text-xl">
+                        <i class="fa-solid fa-language"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-textSub font-medium">Từ vựng trọng tâm</p>
+                        <p class="text-lg font-bold text-textMain">16 Từ mới</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl card-shadow border border-pastelBlue/20 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-successGreen text-xl">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-textSub font-medium">Tiến độ cá nhân</p>
+                        <p id="overview-progress-num" class="text-lg font-bold text-successGreen">0%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Food Showcase -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20">
+                <h3 class="text-xl font-bold text-textMain mb-2 flex items-center">
+                    <i class="fa-solid fa-bowl-food text-pastelOrange mr-2"></i> Món ăn phổ biến trong bài
+                </h3>
+                <p class="text-textSub text-sm mb-6">Nhận diện nhanh các món ăn truyền thống Trung Hoa xuất hiện trong bài khóa.</p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Food Item 1 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🥟</div>
+                        <h4 class="font-bold font-chinese text-textMain">馒头</h4>
+                        <p class="text-xs text-textSub">mántou (Màn thầu)</p>
+                    </div>
+                    <!-- Food Item 2 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🥠</div>
+                        <h4 class="font-bold font-chinese text-textMain">包子</h4>
+                        <p class="text-xs text-textSub">bāozi (Bánh bao)</p>
+                    </div>
+                    <!-- Food Item 3 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🥟</div>
+                        <h4 class="font-bold font-chinese text-textMain">饺子</h4>
+                        <p class="text-xs text-textSub">jiǎozi (Sủi cảo)</p>
+                    </div>
+                    <!-- Food Item 4 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🍜</div>
+                        <h4 class="font-bold font-chinese text-textMain">面条</h4>
+                        <p class="text-xs text-textSub">miàntiáo (Mì sợi)</p>
+                    </div>
+                    <!-- Food Item 5 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🍚</div>
+                        <h4 class="font-bold font-chinese text-textMain">米饭</h4>
+                        <p class="text-xs text-textSub">mǐfàn (Cơm trắng)</p>
+                    </div>
+                    <!-- Food Item 6 -->
+                    <div class="bg-bgMain p-4 rounded-2xl text-center border border-pastelBlue/30 hover:border-pastelOrange transition">
+                        <div class="text-4xl mb-2">🍲</div>
+                        <h4 class="font-bold font-chinese text-textMain">鸡蛋汤</h4>
+                        <p class="text-xs text-textSub">jīdàn tāng (Canh trứng)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. TAB: DIALOGUE (BÀI KHÓA) ================= -->
+        <section id="tab-dialogue" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b border-gray-100 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-textMain flex items-center">
+                            <i class="fa-solid fa-comments text-pastelOrange mr-2"></i> Bài khóa – 课文
+                        </h2>
+                        <p class="text-textSub text-sm">Luyện nghe và đọc hội thoại tại lớp học và nhà ăn.</p>
+                    </div>
+                    <!-- Dialogue Controls -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center bg-bgMain px-3 py-1.5 rounded-xl border border-pastelBlue/40 text-xs">
+                            <span class="mr-2 font-medium">Tốc độ:</span>
+                            <select id="speech-rate" class="bg-transparent font-bold text-textMain focus:outline-none">
+                                <option value="0.75">0.75x</option>
+                                <option value="1.0" selected>1.0x (Chuẩn)</option>
+                                <option value="1.25">1.25x</option>
+                            </select>
+                        </div>
+                        <button onclick="togglePinyin()" id="toggle-pinyin-btn" class="px-3 py-1.5 bg-lightBlue text-blue-600 rounded-xl text-xs font-semibold hover:bg-blue-100 transition">
+                            Ẩn/Hiện Pinyin
+                        </button>
+                        <button onclick="toggleTranslation()" id="toggle-trans-btn" class="px-3 py-1.5 bg-lightOrange text-amber-700 rounded-xl text-xs font-semibold hover:bg-orange-100 transition">
+                            Ẩn/Hiện Nghĩa
+                        </button>
+                        <button onclick="playFullDialogue()" class="px-4 py-1.5 bg-pastelOrange text-white rounded-xl text-xs font-semibold hover:bg-amber-500 shadow-sm transition flex items-center">
+                            <i class="fa-solid fa-volume-high mr-1.5"></i> Nghe toàn bài
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scenario 1: Trong lớp học -->
+                <div class="mt-8">
+                    <div class="inline-block bg-lightBlue text-blue-700 font-bold px-4 py-1.5 rounded-full text-xs mb-6">
+                        场景一：在教室 (Trong lớp học)
+                    </div>
+
+                    <div class="space-y-4" id="scenario-1">
+                        <!-- Dialogue Line 1 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="中午你去哪儿吃饭？">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('中午你去哪儿吃饭？')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">中午你去哪儿吃饭？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Zhōngwǔ nǐ qù nǎr chīfàn?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Buổi trưa bạn đi đâu ăn cơm?</p>
+                            </div>
+                        </div>
+
+                        <!-- Dialogue Line 2 -->
+                        <div class="flex items-start space-x-3 chat-item justify-end" data-speaker="mary" data-text="我去食堂。">
+                            <div class="flex-grow bg-lightOrange/40 p-4 rounded-2xl rounded-tr-none border border-orange-100 max-w-2xl text-right">
+                                <div class="flex justify-between items-start">
+                                    <button onclick="speakText('我去食堂。')" class="text-amber-500 hover:text-amber-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                    <span class="text-xs font-bold text-amber-800">玛丽 (Mary)</span>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">我去食堂。</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Wǒ qù shítáng.</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Tôi đến nhà ăn.</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-lightOrange flex-shrink-0 flex items-center justify-center font-bold text-amber-700 text-sm">玛</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2: Trong nhà ăn -->
+                <div class="mt-12">
+                    <div class="inline-block bg-lightOrange text-amber-800 font-bold px-4 py-1.5 rounded-full text-xs mb-6">
+                        场景二：在食堂 (Trong nhà ăn)
+                    </div>
+
+                    <div class="space-y-4" id="scenario-2">
+                        <!-- Line 3 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="你吃什么？">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('你吃什么？')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">你<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('吃', 'chī', 'Động từ', 'Ăn')">吃</span><span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('什么', 'shénme', 'Đại từ', 'Cái gì, gì')">什么</span>？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Nǐ chī shénme?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Bạn ăn gì?</p>
+                            </div>
+                        </div>
+
+                        <!-- Line 4 -->
+                        <div class="flex items-start space-x-3 chat-item justify-end" data-speaker="mary" data-text="我吃馒头。">
+                            <div class="flex-grow bg-lightOrange/40 p-4 rounded-2xl rounded-tr-none border border-orange-100 max-w-2xl text-right">
+                                <div class="flex justify-between items-start">
+                                    <button onclick="speakText('我吃馒头。')" class="text-amber-500 hover:text-amber-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                    <span class="text-xs font-bold text-amber-800">玛丽 (Mary)</span>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">我吃<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('馒头', 'mántou', 'Danh từ', 'Bánh màn thầu')">馒头</span>。</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Wǒ chī mántou.</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Tôi ăn bánh màn thầu.</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-lightOrange flex-shrink-0 flex items-center justify-center font-bold text-amber-700 text-sm">玛</div>
+                        </div>
+
+                        <!-- Line 5 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="你要几个？">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('你要几个？')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">你<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('要', 'yào', 'Động từ', 'Muốn, cần')">要</span>几<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('个', 'gè', 'Lượng từ', 'Cái, chiếc')">个</span>？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Nǐ yào jǐ ge?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Bạn muốn mấy cái?</p>
+                            </div>
+                        </div>
+
+                        <!-- Line 6 -->
+                        <div class="flex items-start space-x-3 chat-item justify-end" data-speaker="mary" data-text="一个。你吃吗？">
+                            <div class="flex-grow bg-lightOrange/40 p-4 rounded-2xl rounded-tr-none border border-orange-100 max-w-2xl text-right">
+                                <div class="flex justify-between items-start">
+                                    <button onclick="speakText('一个。你吃吗？')" class="text-amber-500 hover:text-amber-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                    <span class="text-xs font-bold text-amber-800">玛丽 (Mary)</span>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">一个。你吃吗？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Yí ge. Nǐ chī ma?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Một cái. Bạn ăn không?</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-lightOrange flex-shrink-0 flex items-center justify-center font-bold text-amber-700 text-sm">玛</div>
+                        </div>
+
+                        <!-- Line 7 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="不吃，我吃米饭。你喝什么？">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('不吃，我吃米饭。你喝什么？')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">不吃，我吃<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('米饭', 'mǐfàn', 'Danh từ', 'Cơm trắng')">米饭</span>。你喝什么？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Bù chī, wǒ chī mǐfàn. Nǐ hē shénme?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Không, tôi ăn cơm. Bạn uống gì?</p>
+                            </div>
+                        </div>
+
+                        <!-- Line 8 -->
+                        <div class="flex items-start space-x-3 chat-item justify-end" data-speaker="mary" data-text="我要一碗鸡蛋汤。你喝吗？">
+                            <div class="flex-grow bg-lightOrange/40 p-4 rounded-2xl rounded-tr-none border border-orange-100 max-w-2xl text-right">
+                                <div class="flex justify-between items-start">
+                                    <button onclick="speakText('我要一碗鸡蛋汤。你喝吗？')" class="text-amber-500 hover:text-amber-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                    <span class="text-xs font-bold text-amber-800">玛丽 (Mary)</span>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">我要一<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('碗', 'wǎn', 'Danh từ', 'Bát')">碗</span><span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('鸡蛋汤', 'jīdàn tāng', 'Danh từ', 'Canh trứng')">鸡蛋汤</span>。你喝吗？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Wǒ yào yì wǎn jīdàn tāng. Nǐ hē ma?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Tôi muốn một bát canh trứng. Bạn uống không?</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-lightOrange flex-shrink-0 flex items-center justify-center font-bold text-amber-700 text-sm">玛</div>
+                        </div>
+
+                        <!-- Line 9 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="不喝，我喝啤酒。">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('不喝，我喝啤酒。')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">不喝，我喝<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('啤酒', 'píjiǔ', 'Danh từ', 'Bia')">啤酒</span>。</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Bù hē, wǒ hē píjiǔ.</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Không, tôi uống bia.</p>
+                            </div>
+                        </div>
+
+                        <!-- Line 10 -->
+                        <div class="flex items-start space-x-3 chat-item justify-end" data-speaker="mary" data-text="这些是什么？">
+                            <div class="flex-grow bg-lightOrange/40 p-4 rounded-2xl rounded-tr-none border border-orange-100 max-w-2xl text-right">
+                                <div class="flex justify-between items-start">
+                                    <button onclick="speakText('这些是什么？')" class="text-amber-500 hover:text-amber-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                    <span class="text-xs font-bold text-amber-800">玛丽 (Mary)</span>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1"><span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('这些', 'zhèxiē', 'Đại từ', 'Những cái này')">这些</span>是什么？</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Zhèxiē shì shénme?</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Những thứ này là gì?</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-lightOrange flex-shrink-0 flex items-center justify-center font-bold text-amber-700 text-sm">玛</div>
+                        </div>
+
+                        <!-- Line 11 -->
+                        <div class="flex items-start space-x-3 chat-item" data-speaker="mike" data-text="这是饺子，这是包子，那是面条。">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center font-bold text-blue-600 text-sm">麦</div>
+                            <div class="flex-grow bg-lightBlue/40 p-4 rounded-2xl rounded-tl-none border border-blue-100 max-w-2xl">
+                                <div class="flex justify-between items-start">
+                                    <span class="text-xs font-bold text-blue-800">麦克 (Mike)</span>
+                                    <button onclick="speakText('这是饺子，这是包子，那是面条。')" class="text-blue-500 hover:text-blue-700 text-sm"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <p class="text-xl font-chinese font-medium text-textMain mt-1">这是<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('饺子', 'jiǎozi', 'Danh từ', 'Sủi cảo')">饺子</span>，这是<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('包子', 'bāozi', 'Danh từ', 'Bánh bao')">包子</span>，那是<span class="vocab-highlight text-amber-600 font-bold cursor-pointer underline decoration-dotted" onclick="showPopupVocab('面条', 'miàntiáo', 'Danh từ', 'Mì sợi')">面条</span>。</p>
+                                <p class="text-xs text-textSub pinyin-line mt-1">Zhè shì jiǎozi, zhè shì bāozi, nà shì miàntiáo.</p>
+                                <p class="text-sm text-textMain translation-line mt-2 italic font-medium">Đây là sủi cảo, đây là bánh bao, kia là mì.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complete Dialogue Button -->
+                <div class="mt-8 text-center">
+                    <button onclick="markSectionCompleted('dialogue'); showAlert('Đã hoàn thành phần Bài khóa! Tiến độ đã được cập nhật.');" class="px-6 py-3 bg-successGreen hover:bg-emerald-600 text-white font-semibold rounded-2xl shadow-md transition">
+                        <i class="fa-solid fa-check mr-2"></i> Đã hoàn thành Bài khóa
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. TAB: VOCABULARY (từ VỰNG) ================= -->
+        <section id="tab-vocab" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-gray-100 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-textMain flex items-center">
+                            <i class="fa-solid fa-book text-pastelOrange mr-2"></i> Từ vựng trọng tâm & Mở rộng – 生词
+                        </h2>
+                        <p class="text-textSub text-sm">Học 16 từ trọng tâm và 5 từ mở rộng với thẻ flashcard và phát âm chuẩn.</p>
+                    </div>
+                    <!-- Controls: Search & Filter -->
+                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                        <div class="relative flex-grow md:w-64">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                            <input type="text" id="vocab-search" placeholder="Tìm từ vựng, pinyin, nghĩa..." oninput="filterVocab()" class="w-full pl-10 pr-4 py-2 bg-bgMain border border-pastelBlue/50 rounded-xl text-sm focus:outline-none focus:border-pastelOrange">
+                        </div>
+                        <select id="vocab-filter" onchange="filterVocab()" class="bg-bgMain border border-pastelBlue/50 px-3 py-2 rounded-xl text-sm text-textMain focus:outline-none focus:border-pastelOrange">
+                            <option value="all">Tất cả từ loại</option>
+                            <option value="Danh từ">Danh từ</option>
+                            <option value="Động từ">Động từ</option>
+                            <option value="Lượng từ">Lượng từ</option>
+                            <option value="Đại từ">Đại từ</option>
+                        </select>
+                        <button onclick="openFlashcardModal()" class="px-4 py-2 bg-lightOrange text-amber-800 font-semibold rounded-xl text-sm hover:bg-orange-100 transition flex items-center">
+                            <i class="fa-solid fa-clone mr-2"></i> Flashcards
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vocabulary Cards Grid -->
+                <div id="vocab-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Extended Vocabulary Section -->
+                <div class="mt-12 pt-8 border-t border-gray-100">
+                    <h3 class="text-lg font-bold text-textMain mb-4 flex items-center">
+                        <i class="fa-solid fa-puzzle-piece text-pastelOrange mr-2"></i> Từ vựng mở rộng (扩展词汇)
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="extended-vocab-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Food Distinction Note -->
+                <div class="mt-8 bg-lightBlue/50 p-6 rounded-2xl border border-pastelBlue/40">
+                    <h4 class="font-bold text-blue-900 mb-2 flex items-center">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-2"></i> Phân biệt các loại bánh (Màn thầu vs Bánh bao vs Sủi cảo)
+                    </h4>
+                    <ul class="text-sm text-textSub space-y-2 list-disc list-inside">
+                        <li><strong class="text-textMain">馒头 (mántou):</strong> Bánh màn thầu truyền thống, làm từ bột mì lên men, <span class="text-red-500 font-semibold">không có nhân</span>.</li>
+                        <li><strong class="text-textMain">包子 (bāozi):</strong> Bánh bao, làm từ bột mì lên men, <span class="text-successGreen font-semibold">có nhân thịt hoặc rau</span> bên trong.</li>
+                        <li><strong class="text-textMain">饺子 (jiǎozi):</strong> Sủi cảo, vỏ bột mì cán mỏng gói nhân hình bán nguyệt, thường dùng để luộc hoặc hấp/rán.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. TAB: GRAMMAR (NGỮ PHÁP) ================= -->
+        <section id="tab-grammar" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-textMain flex items-center">
+                        <i class="fa-solid fa-graduation-cap text-pastelOrange mr-2"></i> Ngữ pháp trọng tâm – 语法
+                    </h2>
+                    <p class="text-textSub text-sm mt-1">Giải thích chi tiết các cấu trúc ngữ pháp HSK 1 trong bài.</p>
+                </div>
+
+                <!-- Grammar Item 1 -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-textMain flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-sm mr-3">1</span>
+                            Đại từ nghi vấn 什么 (shénme) – Cái gì, gì
+                        </h3>
+                        <span class="text-xs bg-lightOrange text-amber-800 px-3 py-1 rounded-full font-semibold">Hỏi sự vật</span>
+                    </div>
+                    <p class="text-textSub text-sm leading-relaxed">
+                        <strong class="text-textMain">什么</strong> là từ nghi vấn dùng để hỏi về sự vật, sự việc hoặc thông tin chưa biết. Thường đứng ở vị trí của thành phần mà người nói muốn hỏi.
+                    </p>
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/30">
+                        <p class="text-xs font-bold text-textSub uppercase mb-2">Cấu trúc:</p>
+                        <p class="font-mono text-sm bg-lightBlue/30 p-2 rounded text-blue-900 font-bold">Chủ ngữ + Động từ + 什么？</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">你吃什么？</p>
+                                <p class="text-xs text-textSub">Nǐ chī shénme?</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Bạn ăn gì?</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">你喝什么？</p>
+                                <p class="text-xs text-textSub">Nǐ hē shénme?</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Bạn uống gì?</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">你要什么？</p>
+                                <p class="text-xs text-textSub">Nǐ yào shénme?</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Bạn muốn gì?</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">这是什么？</p>
+                                <p class="text-xs text-textSub">Zhè shì shénme?</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Đây là cái gì?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grammar Item 2 -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-textMain flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-sm mr-3">2</span>
+                            Động từ 要 (yào) – Muốn, cần
+                        </h3>
+                        <span class="text-xs bg-lightOrange text-amber-800 px-3 py-1 rounded-full font-semibold">Diễn đạt nhu cầu</span>
+                    </div>
+                    <p class="text-textSub text-sm leading-relaxed">
+                        <strong class="text-textMain">要</strong> được sử dụng để diễn đạt mong muốn hoặc nhu cầu mua sắm, gọi món ăn. Câu phủ định dùng <strong class="text-red-500">不要</strong> (hoặc không dùng 要).
+                    </p>
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/30">
+                        <p class="text-xs font-bold text-textSub uppercase mb-2">Cấu trúc:</p>
+                        <p class="font-mono text-sm bg-lightBlue/30 p-2 rounded text-blue-900 font-bold">Khẳng định: Chủ ngữ + 要 + Danh từ<br>Phủ định: Chủ ngữ + 不要 + Danh từ</p>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">我要米饭。</p>
+                                <p class="text-xs text-textSub">Wǒ yào mǐfàn.</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Tôi muốn cơm.</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">我要一个包子。</p>
+                                <p class="text-xs text-textSub">Wǒ yào yí ge bāozi.</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Tôi muốn một cái bánh bao.</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-chinese font-bold text-textMain">我不要啤酒。</p>
+                                <p class="text-xs text-textSub">Wǒ bú yào píjiǔ.</p>
+                            </div>
+                            <span class="text-xs text-amber-700 font-medium">Tôi không muốn bia.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grammar Item 3 & 4 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Measure Word 个 -->
+                    <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                        <h3 class="text-md font-bold text-textMain flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-xs mr-2">3</span>
+                            Lượng từ 个 (gè)
+                        </h3>
+                        <p class="text-textSub text-sm">
+                            Trong tiếng Trung, danh từ thường đi kèm lượng từ khi biểu thị số lượng. <strong class="text-textMain">个</strong> là lượng từ phổ biến nhất.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/30 font-mono text-xs text-blue-900 font-bold">
+                            Số từ + 个 + Danh từ
+                        </div>
+                        <ul class="text-xs text-textSub space-y-1">
+                            <li>• 一个包子 (yí ge bāozi) – Một cái bánh bao</li>
+                            <li>• 两个馒头 (liǎng ge mántou) – Hai cái màn thầu</li>
+                            <li>• 三个人 (sān ge rén) – Ba người</li>
+                        </ul>
+                    </div>
+
+                    <!-- Measure Word 碗 -->
+                    <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                        <h3 class="text-md font-bold text-textMain flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-xs mr-2">4</span>
+                            Lượng từ 碗 (wǎn)
+                        </h3>
+                        <p class="text-textSub text-sm">
+                            <strong class="text-textMain">碗</strong> có nghĩa là cái bát. Khi đứng sau số từ, nó làm lượng từ chỉ lượng thức ăn đựng trong bát.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-pastelBlue/30 font-mono text-xs text-blue-900 font-bold">
+                            Số từ + 碗 + Danh từ
+                        </div>
+                        <ul class="text-xs text-textSub space-y-1">
+                            <li>• 一碗鸡蛋汤 (yì wǎn jīdàn tāng) – Một bát canh trứng</li>
+                            <li>• 两碗米饭 (liǎng wǎn mǐfàn) – Hai bát cơm</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Grammar Item 5 -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-textMain flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-sm mr-3">5</span>
+                            Đại từ chỉ định 这、那、这些、那些
+                        </h3>
+                        <span class="text-xs bg-lightBlue text-blue-800 px-3 py-1 rounded-full font-semibold">Vị trí & Khoảng cách</span>
+                    </div>
+                    <p class="text-textSub text-sm leading-relaxed">
+                        Dùng để xác định vị trí gần/xa và số ít/số nhiều của sự vật.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-lg">这 (zhè)</p>
+                            <p class="text-xs text-textSub mt-1">Đây, này (Số ít, gần)</p>
+                            <p class="text-xs text-amber-700 mt-2 font-medium">这是包子。<br>(Đây là bánh bao)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-lg">那 (nà)</p>
+                            <p class="text-xs text-textSub mt-1">Kia, đó (Số ít, xa)</p>
+                            <p class="text-xs text-amber-700 mt-2 font-medium">那是面条。<br>(Kia là mì)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-lg">这些 (zhèxiē)</p>
+                            <p class="text-xs text-textSub mt-1">Những cái này (Số nhiều, gần)</p>
+                            <p class="text-xs text-amber-700 mt-2 font-medium">这些是饺子。<br>(Những thứ này là sủi cảo)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-lg">那些 (nàxiē)</p>
+                            <p class="text-xs text-textSub mt-1">Những cái kia (Số nhiều, xa)</p>
+                            <p class="text-xs text-amber-700 mt-2 font-medium">那些是什么？<br>(Những thứ kia là gì?)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                    <button onclick="markSectionCompleted('grammar'); showAlert('Đã hoàn thành phần Ngữ pháp!');" class="px-6 py-3 bg-successGreen hover:bg-emerald-600 text-white font-semibold rounded-2xl shadow-md transition">
+                        <i class="fa-solid fa-check mr-2"></i> Đã hoàn thành Ngữ pháp
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. TAB: PHONETICS (NGỮ ÂM) ================= -->
+        <section id="tab-phonetics" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-textMain flex items-center">
+                        <i class="fa-solid fa-volume-high text-pastelOrange mr-2"></i> Ngữ âm và phát âm – 语音
+                    </h2>
+                    <p class="text-textSub text-sm mt-1">Nắm vững quy tắc biến điệu của 一 và 不, cùng thanh nhẹ và luyện đọc âm tiết.</p>
+                </div>
+
+                <!-- Tone Sandhi 1: 一 -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <h3 class="text-lg font-bold text-textMain flex items-center">
+                        <span class="w-8 h-8 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-sm mr-3">1</span>
+                        Quy tắc biến điệu của 一 (yī)
+                    </h3>
+                    <p class="text-textSub text-sm leading-relaxed">
+                        <strong class="text-textMain">一</strong> có thanh điệu gốc là thanh 1. Khi kết hợp với các âm tiết phía sau, thanh điệu thay đổi theo quy tắc sau:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-bold text-textMain">Đứng riêng / Số đếm</p>
+                            <p class="text-xs text-textSub mt-1">Giữ nguyên <strong>Thanh 1</strong></p>
+                            <p class="text-sm font-chinese font-bold text-amber-600 mt-2">一 (yī)</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-bold text-textMain">Trước Thanh 1, 2, 3</p>
+                            <p class="text-xs text-textSub mt-1">Biến thành <strong>Thanh 4</strong></p>
+                            <p class="text-sm font-chinese font-bold text-amber-600 mt-2">一天 (yì tiān) • 一个 (yí ge)*</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-bold text-textMain">Trước Thanh 4</p>
+                            <p class="text-xs text-textSub mt-1">Biến thành <strong>Thanh 2</strong></p>
+                            <p class="text-sm font-chinese font-bold text-amber-600 mt-2">一碗 (yì wǎn)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tone Sandhi 2: 不 -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <h3 class="text-lg font-bold text-textMain flex items-center">
+                        <span class="w-8 h-8 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-sm mr-3">2</span>
+                        Quy tắc biến điệu của 不 (bù)
+                    </h3>
+                    <p class="text-textSub text-sm leading-relaxed">
+                        <strong class="text-textMain">不</strong> có thanh điệu gốc là thanh 4. Trước thanh 4, nó đọc thành thanh 2.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-textMain">Trước Thanh 1, 2, 3 (Giữ Thanh 4)</p>
+                                <p class="text-xs text-textSub mt-1">不吃 (bù chī) • 不喝 (bù hē) • 不好 (bù hǎo)</p>
+                            </div>
+                            <button onclick="speakText('不吃 不喝 不好')" class="p-2 bg-lightBlue text-blue-600 rounded-lg hover:bg-blue-100"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-pastelBlue/20 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-textMain">Trước Thanh 4 (Đọc Thanh 2)</p>
+                                <p class="text-xs text-textSub mt-1">不是 (bú shì) • 不要 (bú yào)</p>
+                            </div>
+                            <button onclick="speakText('不是 不要')" class="p-2 bg-lightBlue text-blue-600 rounded-lg hover:bg-blue-100"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Neutral Tone & Multi-syllable -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                        <h3 class="text-md font-bold text-textMain flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-xs mr-2">3</span>
+                            Thanh nhẹ (轻声)
+                        </h3>
+                        <p class="text-textSub text-sm">
+                            Âm tiết không mang thanh điệu rõ ràng, đọc ngắn và nhẹ.
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="bg-white p-2 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <span>馒头 (mántou)</span>
+                                <button onclick="speakText('馒头')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <span>包子 (bāozi)</span>
+                                <button onclick="speakText('包子')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <span>饺子 (jiǎozi)</span>
+                                <button onclick="speakText('饺子')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="bg-white p-2 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <span>桌子 (zhuōzi)</span>
+                                <button onclick="speakText('桌子')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                        <h3 class="text-md font-bold text-textMain flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-pastelOrange text-white flex items-center justify-center text-xs mr-2">4</span>
+                            Luyện đọc cụm từ
+                        </h3>
+                        <p class="text-textSub text-sm">
+                            Luyện đọc liền mạch các cụm từ ăn uống.
+                        </p>
+                        <div class="space-y-2 text-xs">
+                            <div class="bg-white p-2.5 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <div><strong class="font-chinese">吃米饭</strong> <span class="text-textSub">(chī mǐfàn)</span></div>
+                                <button onclick="speakText('吃米饭')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="bg-white p-2.5 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <div><strong class="font-chinese">喝鸡蛋汤</strong> <span class="text-textSub">(hē jīdàn tāng)</span></div>
+                                <button onclick="speakText('喝鸡蛋汤')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                            <div class="bg-white p-2.5 rounded border border-pastelBlue/20 flex justify-between items-center">
+                                <div><strong class="font-chinese">去食堂</strong> <span class="text-textSub">(qù shítáng)</span></div>
+                                <button onclick="speakText('去食堂')" class="text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                    <button onclick="markSectionCompleted('phonetics'); showAlert('Đã hoàn thành phần Ngữ âm!');" class="px-6 py-3 bg-successGreen hover:bg-emerald-600 text-white font-semibold rounded-2xl shadow-md transition">
+                        <i class="fa-solid fa-check mr-2"></i> Đã hoàn thành Ngữ âm
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. TAB: EXERCISES (BÀI TẬP) ================= -->
+        <section id="tab-exercises" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20 space-y-12">
+                <div>
+                    <h2 class="text-2xl font-bold text-textMain flex items-center">
+                        <i class="fa-solid fa-pen-to-square text-pastelOrange mr-2"></i> Bài tập thực hành – 练习
+                    </h2>
+                    <p class="text-textSub text-sm mt-1">Làm bài tập tương tác, chấm điểm tự động và xem giải thích chi tiết.</p>
+                </div>
+
+                <!-- Exercise 1: Matching / Nhận biết từ vựng -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-textMain">Bài tập 1: Nhận biết món ăn</h3>
+                        <span class="text-xs bg-lightOrange text-amber-800 px-3 py-1 rounded-full font-semibold">Tương tác kéo thả / Chọn</span>
+                    </div>
+                    <p class="text-textSub text-sm">Chọn nghĩa tiếng Việt chính xác cho mỗi từ tiếng Trung sau:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="ex1-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button onclick="checkEx1()" class="px-5 py-2.5 bg-pastelOrange hover:bg-amber-500 text-white font-semibold rounded-xl text-sm shadow-sm transition">
+                        Kiểm tra Bài 1
+                    </button>
+                    <div id="ex1-result" class="text-sm font-semibold mt-2"></div>
+                </div>
+
+                <!-- Exercise 2: Multiple Choice / Trắc nghiệm -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-textMain">Bài tập 2: Chọn từ thích hợp (Trắc nghiệm 8 câu)</h3>
+                        <span class="text-xs bg-lightBlue text-blue-800 px-3 py-1 rounded-full font-semibold">HSK 1 Standard</span>
+                    </div>
+
+                    <div class="space-y-6" id="ex2-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button onclick="checkEx2()" class="px-5 py-2.5 bg-pastelOrange hover:bg-amber-500 text-white font-semibold rounded-xl text-sm shadow-sm transition">
+                        Kiểm tra Đáp án Trắc nghiệm
+                    </button>
+                    <div id="ex2-result" class="text-sm font-semibold mt-2"></div>
+                </div>
+
+                <!-- Exercise 3: Answer Questions / Trả lời câu hỏi -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-6">
+                    <h3 class="text-lg font-bold text-textMain">Bài tập 3: Trả lời câu hỏi dựa trên bài khóa</h3>
+                    <p class="text-textSub text-sm">Dựa vào hội thoại, hãy nhập câu trả lời bằng tiếng Trung (hoặc xem đáp án gợi ý).</p>
+                    
+                    <div class="space-y-4" id="ex3-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Exercise 4: Complete Dialogue / Hoàn thành hội thoại -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <h3 class="text-lg font-bold text-textMain">Bài tập 4: Hoàn thành hội thoại</h3>
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/20 space-y-3">
+                        <p class="font-chinese text-base"><strong>A:</strong> <input type="text" id="ex4-input" placeholder="Nhập câu hỏi..." class="border border-gray-300 rounded px-2 py-1 text-sm font-chinese focus:outline-none focus:border-pastelOrange"> ？</p>
+                        <p class="font-chinese text-base"><strong>B:</strong> 我去食堂吃饭。</p>
+                        <button onclick="checkEx4()" class="px-4 py-2 bg-pastelOrange text-white text-xs font-semibold rounded-lg">Kiểm tra</button>
+                        <div id="ex4-result" class="text-xs font-semibold"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 5: Object Recognition / Đồ vật -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <h3 class="text-lg font-bold text-textMain">Bài tập 5: Nhận diện đồ vật (Mẫu: 这是什么？- 这是筷子。)</h3>
+                    <p class="text-textSub text-sm">Chọn tên tiếng Trung đúng cho các đồ vật:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="ex5-container">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button onclick="checkEx5()" class="px-5 py-2.5 bg-pastelOrange hover:bg-amber-500 text-white font-semibold rounded-xl text-sm shadow-sm transition">Kiểm tra Bài 5</button>
+                    <div id="ex5-result" class="text-sm font-semibold"></div>
+                </div>
+
+                <!-- Exercise 6: Reading Comprehension / Đọc hiểu -->
+                <div class="bg-bgMain p-6 rounded-2xl border border-pastelBlue/30 space-y-4">
+                    <h3 class="text-lg font-bold text-textMain">Bài tập 6: Đọc hiểu đoạn văn</h3>
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/20 space-y-3">
+                        <p class="font-chinese text-lg font-medium leading-relaxed">中午我去食堂吃饭。这是馒头，这是包子，那是面条，这些是饺子。我吃馒头，喝鸡蛋汤。麦克不吃馒头，不喝鸡蛋汤，他吃米饭，喝啤酒。</p>
+                        <p class="text-xs text-textSub italic">Bản dịch: Trưa nay tôi đi nhà ăn ăn cơm. Đây là màn thầu, đây là bánh bao, kia là mì, những thứ này là sủi cảo. Tôi ăn màn thầu, uống canh trứng. Mike không ăn màn thầu, không uống canh trứng, anh ấy ăn cơm trắng, uống bia.</p>
+                        <div class="mt-4 space-y-3" id="ex6-questions">
+                            <!-- Populated by JS -->
+                        </div>
+                        <button onclick="checkEx6()" class="px-4 py-2 bg-pastelOrange text-white text-xs font-semibold rounded-lg mt-2">Kiểm tra Đọc hiểu</button>
+                        <div id="ex6-result" class="text-xs font-semibold"></div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                    <button onclick="markSectionCompleted('exercises'); showAlert('Đã hoàn thành phần Bài tập! Chúc mừng bạn.');" class="px-6 py-3 bg-successGreen hover:bg-emerald-600 text-white font-semibold rounded-2xl shadow-md transition">
+                        <i class="fa-solid fa-check mr-2"></i> Hoàn thành toàn bộ Bài tập
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 7. TAB: SUMMARY (TỔNG KẾT & TIẾN ĐỘ) ================= -->
+        <section id="tab-summary" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border border-pastelBlue/20 space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-textMain flex items-center">
+                        <i class="fa-solid fa-award text-pastelOrange mr-2"></i> Tổng kết bài học & Tiến độ – 课堂总结
+                    </h2>
+                    <p class="text-textSub text-sm mt-1">Hệ thống hóa toàn bộ kiến thức trọng tâm của Bài 7.</p>
+                </div>
+
+                <!-- Progress Dashboard -->
+                <div class="bg-gradient-to-r from-lightOrange to-lightBlue p-6 rounded-2xl border border-pastelBlue/40 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-textMain text-lg flex items-center">
+                            <i class="fa-solid fa-chart-pie text-pastelOrange mr-2"></i> Tiến độ học tập của bạn
+                        </h3>
+                        <span id="summary-progress-percent" class="text-xl font-extrabold text-amber-700">0%</span>
+                    </div>
+                    <div class="w-full bg-white/80 rounded-full h-4 overflow-hidden shadow-inner">
+                        <div id="progress-bar-fill" class="bg-successGreen h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs text-textSub">Tiến độ được lưu tự động trên trình duyệt của bạn (localStorage).</p>
+                </div>
+
+                <!-- Key Vocabulary Summary Table -->
+                <div>
+                    <h3 class="text-lg font-bold text-textMain mb-4">1. Bảng từ vựng trọng tâm (16 từ)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-bgMain border-b border-pastelBlue/30 text-xs text-textSub uppercase">
+                                    <th class="p-3">STT</th>
+                                    <th class="p-3">Chữ Hán</th>
+                                    <th class="p-3">Pinyin</th>
+                                    <th class="p-3">Từ loại</th>
+                                    <th class="p-3">Nghĩa tiếng Việt</th>
+                                    <th class="p-3 text-center">Phát âm</th>
+                                </tr>
+                            </thead>
+                            <tbody id="summary-vocab-table" class="text-sm">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Key Sentences Summary -->
+                <div class="pt-6 border-t border-gray-100">
+                    <h3 class="text-lg font-bold text-textMain mb-4">2. Mẫu câu giao tiếp quan trọng</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">你吃什么？ <button onclick="speakText('你吃什么？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Nǐ chī shénme?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Bạn ăn gì?</p>
+                        </div>
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">你喝什么？ <button onclick="speakText('你喝什么？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Nǐ hē shénme?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Bạn uống gì?</p>
+                        </div>
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">你要几个？ <button onclick="speakText('你要几个？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Nǐ yào jǐ ge?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Bạn muốn mấy cái?</p>
+                        </div>
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">你去哪儿吃饭？ <button onclick="speakText('你去哪儿吃饭？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Nǐ qù nǎr chīfàn?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Bạn đi đâu ăn cơm?</p>
+                        </div>
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">这是什么？ <button onclick="speakText('这是什么？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Zhè shì shénme?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Đây là cái gì?</p>
+                        </div>
+                        <div class="bg-bgMain p-4 rounded-xl border border-pastelBlue/20">
+                            <p class="font-chinese font-bold text-textMain text-base">这些是什么？ <button onclick="speakText('这些是什么？')" class="text-blue-500 text-xs ml-2"><i class="fa-solid fa-volume-high"></i></button></p>
+                            <p class="text-xs text-textSub">Zhèxiē shì shénme?</p>
+                            <p class="text-xs text-amber-700 font-medium mt-1">Những thứ này là gì?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-4">
+                    <button onclick="resetProgress()" class="px-6 py-2 bg-red-100 hover:bg-red-200 text-red-600 font-semibold rounded-xl text-xs transition">
+                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Đặt lại tiến độ học tập
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-pastelBlue/40 py-6 mt-12 text-center text-xs text-textSub">
+        <p>第七课 – 你吃什么？ | Giáo trình Hán ngữ 1 (Phiên bản tương tác web HSK 1)</p>
+        <p class="mt-1">Designed with Pastel Orange & Blue Theme for Vietnamese learners.</p>
+    </footer>
+
+    <!-- Back to top button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 z-45 w-12 h-12 bg-pastelOrange text-white rounded-full shadow-lg flex items-center justify-center hover:bg-amber-500 transition focus:outline-none" title="Về đầu trang">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- VOCAB POPUP MODAL -->
+    <div id="vocab-popup" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full card-shadow border border-pastelBlue/30 text-center relative animate-scale">
+            <button onclick="closePopupVocab()" class="absolute top-4 right-4 text-gray-400 hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <div id="popup-chinese" class="text-4xl font-chinese font-bold text-textMain mb-2"></div>
+            <div id="popup-pinyin" class="text-sm font-semibold text-amber-600 mb-1"></div>
+            <div id="popup-pos" class="inline-block px-3 py-1 rounded-full bg-lightBlue text-blue-700 text-xs font-semibold mb-3"></div>
+            <div id="popup-meaning" class="text-base text-textMain font-medium mb-6"></div>
+            <button onclick="speakPopupText()" class="w-full py-2.5 bg-pastelOrange text-white font-semibold rounded-xl shadow-sm hover:bg-amber-500 transition flex items-center justify-center">
+                <i class="fa-solid fa-volume-high mr-2"></i> Nghe phát âm
+            </button>
+        </div>
+    </div>
+
+    <!-- FLASHCARD MODAL -->
+    <div id="flashcard-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full card-shadow border border-pastelBlue/30 relative flex flex-col items-center">
+            <button onclick="closeFlashcardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-textMain mb-4"><i class="fa-solid fa-clone text-pastelOrange mr-2"></i> Flashcards Từ vựng</h3>
+            
+            <!-- Flashcard Card -->
+            <div id="flashcard-card" class="flip-card w-full h-64 cursor-pointer mb-6" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner relative w-full h-full text-center rounded-2xl shadow-md border border-pastelBlue/30 bg-bgMain">
+                    <!-- Front -->
+                    <div class="flip-card-front absolute w-full h-full flex flex-col items-center justify-center p-6 bg-white rounded-2xl">
+                        <span id="fc-emoji" class="text-5xl mb-3">📖</span>
+                        <h4 id="fc-hanzi" class="text-4xl font-chinese font-bold text-textMain mb-2">中午</h4>
+                        <p class="text-xs text-textSub">(Nhấn để lật thẻ xem nghĩa)</p>
+                    </div>
+                    <!-- Back -->
+                    <div class="flip-card-back absolute w-full h-full flex flex-col items-center justify-center p-6 bg-lightOrange rounded-2xl">
+                        <h4 id="fc-pinyin" class="text-2xl font-bold text-amber-800 mb-1">zhōngwǔ</h4>
+                        <p id="fc-pos" class="text-xs font-semibold text-amber-700 bg-white/80 px-3 py-1 rounded-full mb-3">Danh từ</p>
+                        <p id="fc-meaning" class="text-xl font-bold text-textMain">Buổi trưa</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center justify-between w-full gap-4">
+                <button onclick="prevFlashcard()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-textMain rounded-xl font-semibold text-sm transition"><i class="fa-solid fa-chevron-left mr-1"></i> Trước</button>
+                <span id="fc-counter" class="text-xs font-bold text-textSub">1 / 16</span>
+                <button onclick="nextFlashcard()" class="px-4 py-2 bg-pastelOrange hover:bg-amber-500 text-white rounded-xl font-semibold text-sm transition">Sau <i class="fa-solid fa-chevron-right ml-1"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal / Message Box (NO alert() used) -->
+    <div id="alert-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full card-shadow border border-pastelBlue/30 text-center">
+            <div id="alert-icon" class="text-4xl text-pastelOrange mb-3"><i class="fa-solid fa-circle-check"></i></div>
+            <p id="alert-message" class="text-textMain font-medium mb-6 text-sm"></p>
+            <button onclick="closeAlert()" class="px-6 py-2.5 bg-pastelOrange hover:bg-amber-500 text-white font-semibold rounded-xl text-sm shadow-sm transition">Đã hiểu</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Store for Vocabulary
+        const vocabList = [
+            { id: 1, hanzi: "中午", pinyin: "zhōngwǔ", pos: "Danh từ", meaning: "Buổi trưa", emoji: "☀️" },
+            { id: 2, hanzi: "吃", pinyin: "chī", pos: "Động từ", meaning: "Ăn", emoji: "🥢" },
+            { id: 3, hanzi: "饭", pinyin: "fàn", pos: "Danh từ", meaning: "Cơm, bữa ăn", emoji: "🍚" },
+            { id: 4, hanzi: "食堂", pinyin: "shítáng", pos: "Danh từ", meaning: "Nhà ăn", emoji: "🏫" },
+            { id: 5, hanzi: "馒头", pinyin: "mántou", pos: "Danh từ", meaning: "Bánh màn thầu (không nhân)", emoji: "🥟" },
+            { id: 6, hanzi: "米饭", pinyin: "mǐfàn", pos: "Danh từ", meaning: "Cơm trắng", emoji: "🍚" },
+            { id: 7, hanzi: "要", pinyin: "yào", pos: "Động từ", meaning: "Muốn, cần", emoji: "🤲" },
+            { id: 8, hanzi: "个", pinyin: "gè", pos: "Lượng từ", meaning: "Cái, chiếc", emoji: "🔢" },
+            { id: 9, hanzi: "碗", pinyin: "wǎn", pos: "Danh từ", meaning: "Bát", emoji: "🥣" },
+            { id: 10, hanzi: "鸡蛋", pinyin: "jīdàn", pos: "Danh từ", meaning: "Trứng gà", emoji: "🥚" },
+            { id: 11, hanzi: "汤", pinyin: "tāng", pos: "Danh từ", meaning: "Canh, súp", emoji: "🍲" },
+            { id: 12, hanzi: "啤酒", pinyin: "píjiǔ", pos: "Danh từ", meaning: "Bia", emoji: "🍺" },
+            { id: 13, hanzi: "这些", pinyin: "zhèxiē", pos: "Đại từ", meaning: "Những cái này", emoji: "📦" },
+            { id: 14, hanzi: "饺子", pinyin: "jiǎozi", pos: "Danh từ", meaning: "Sủi cảo", emoji: "🥟" },
+            { id: 15, hanzi: "包子", pinyin: "bāozi", pos: "Danh từ", meaning: "Bánh bao (có nhân)", emoji: "🥠" },
+            { id: 16, hanzi: "面条", pinyin: "miàntiáo", pos: "Danh từ", meaning: "Mì sợi", emoji: "🍜" }
+        ];
+
+        const extendedVocab = [
+            { hanzi: "米", pinyin: "mǐ", meaning: "Gạo", emoji: "🌾" },
+            { hanzi: "鸡", pinyin: "jī", meaning: "Gà", emoji: "🐓" },
+            { hanzi: "蛋", pinyin: "dàn", meaning: "Trứng", emoji: "🥚" },
+            { hanzi: "酒", pinyin: "jiǔ", meaning: "Rượu, đồ uống có cồn", emoji: "🍶" },
+            { hanzi: "些", pinyin: "xiē", meaning: "Một vài, một số", emoji: "✨" }
+        ];
+
+        // State Management
+        let appState = {
+            completedSections: JSON.parse(localStorage.getItem('hsk1_l7_completed')) || [],
+            learnedVocab: JSON.parse(localStorage.getItem('hsk1_l7_learned')) || []
+        };
+
+        // Initialize on load
+        window.onload = function() {
+            renderVocabGrid();
+            renderExtendedVocab();
+            renderSummaryVocabTable();
+            renderExercises();
+            updateProgressDisplay();
+            
+            // Check speech synthesis support
+            if (!('speechSynthesis' in window)) {
+                console.warn('Web Speech API not supported on this browser.');
+            }
+        };
+
+        // Navigation Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.tab === tabId) {
+                    btn.classList.add('bg-pastelOrange', 'text-white');
+                    btn.classList.remove('text-textSub');
+                } else {
+                    btn.classList.remove('bg-pastelOrange', 'text-white');
+                    btn.classList.add('text-textSub');
+                }
+            });
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+
+        // Web Speech API Pronunciation
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                showAlert('Trình duyệt của bạn không hỗ trợ phát âm giọng đọc.');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            const rate = parseFloat(document.getElementById('speech-rate') ? document.getElementById('speech-rate').value : 1.0);
+            utterance.rate = rate;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        let currentPopupText = '';
+        function showPopupVocab(hanzi, pinyin, pos, meaning) {
+            currentPopupText = hanzi;
+            document.getElementById('popup-chinese').innerText = hanzi;
+            document.getElementById('popup-pinyin').innerText = pinyin;
+            document.getElementById('popup-pos').innerText = pos;
+            document.getElementById('popup-meaning').innerText = meaning;
+            document.getElementById('vocab-popup').classList.remove('hidden');
+        }
+        function closePopupVocab() {
+            document.getElementById('vocab-popup').classList.add('hidden');
+        }
+        function speakPopupText() {
+            speakText(currentPopupText);
+        }
+
+        // Custom Alert Modal
+        function showAlert(msg) {
+            document.getElementById('alert-message').innerText = msg;
+            document.getElementById('alert-modal').classList.remove('hidden');
+        }
+        function closeAlert() {
+            document.getElementById('alert-modal').classList.add('hidden');
+        }
+
+        // Dialogue Display Toggles
+        let pinyinVisible = true;
+        function togglePinyin() {
+            pinyinVisible = !pinyinVisible;
+            document.querySelectorAll('.pinyin-line').forEach(el => {
+                el.style.display = pinyinVisible ? 'block' : 'none';
+            });
+        }
+
+        let transVisible = true;
+        function toggleTranslation() {
+            transVisible = !transVisible;
+            document.querySelectorAll('.translation-line').forEach(el => {
+                el.style.display = transVisible ? 'block' : 'none';
+            });
+        }
+
+        function playFullDialogue() {
+            const lines = [
+                "中午你去哪儿吃饭？", "我去食堂。",
+                "你吃什么？", "我吃馒头。",
+                "你要几个？", "一个。你吃吗？",
+                "不吃，我吃米饭。你喝什么？", "我要一碗鸡蛋汤。你喝吗？",
+                "不喝，我喝啤酒。",
+                "这些是什么？", "这是饺子，这是包子，那是面条。"
+            ];
+            let index = 0;
+            function playNext() {
+                if (index < lines.length) {
+                    const utterance = new SpeechSynthesisUtterance(lines[index]);
+                    utterance.lang = 'zh-CN';
+                    utterance.rate = parseFloat(document.getElementById('speech-rate').value || 1.0);
+                    utterance.onend = () => {
+                        index++;
+                        setTimeout(playNext, 400);
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+            window.speechSynthesis.cancel();
+            playNext();
+        }
+
+        // Vocabulary Grid Rendering
+        function renderVocabGrid(filteredList = vocabList) {
+            const grid = document.getElementById('vocab-grid');
+            grid.innerHTML = '';
+            filteredList.forEach(item => {
+                const isLearned = appState.learnedVocab.includes(item.id);
+                const card = document.createElement('div');
+                card.className = `bg-bgMain p-5 rounded-2xl border ${isLearned ? 'border-successGreen bg-emerald-50/20' : 'border-pastelBlue/30'} flex flex-col justify-between card-shadow transition hover:border-pastelOrange`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-3xl">${item.emoji}</span>
+                            <input type="checkbox" ${isLearned ? 'checked' : ''} onchange="toggleLearnVocab(${item.id})" class="w-4 h-4 accent-successGreen cursor-pointer" title="Đã học">
+                        </div>
+                        <h4 class="text-3xl font-chinese font-bold text-textMain">${item.hanzi}</h4>
+                        <p class="text-xs font-bold text-amber-600 mt-1">${item.pinyin}</p>
+                        <span class="inline-block mt-2 px-2.5 py-0.5 bg-lightBlue text-blue-700 text-[10px] font-semibold rounded-full">${item.pos}</span>
+                        <p class="text-sm font-medium text-textMain mt-3">${item.meaning}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-pastelBlue/20 flex justify-between items-center">
+                        <button onclick="speakText('${item.hanzi}')" class="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center">
+                            <i class="fa-solid fa-volume-high mr-1"></i> Nghe
+                        </button>
+                        <span class="text-[10px] text-textSub">STT ${item.id}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderExtendedVocab() {
+            const grid = document.getElementById('extended-vocab-grid');
+            grid.innerHTML = '';
+            extendedVocab.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-bgMain p-4 rounded-xl border border-pastelBlue/30 text-center';
+                card.innerHTML = `
+                    <div class="text-2xl mb-1">${item.emoji}</div>
+                    <h5 class="text-xl font-chinese font-bold text-textMain">${item.hanzi}</h5>
+                    <p class="text-xs text-amber-600 font-bold">${item.pinyin}</p>
+                    <p class="text-xs text-textSub mt-1">${item.meaning}</p>
+                    <button onclick="speakText('${item.hanzi}')" class="mt-2 text-xs text-blue-500"><i class="fa-solid fa-volume-high"></i></button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterVocab() {
+            const query = document.getElementById('vocab-search').value.toLowerCase();
+            const filterPos = document.getElementById('vocab-filter').value;
+
+            const filtered = vocabList.filter(item => {
+                const matchQuery = item.hanzi.toLowerCase().includes(query) || 
+                                   item.pinyin.toLowerCase().includes(query) || 
+                                   item.meaning.toLowerCase().includes(query);
+                const matchPos = filterPos === 'all' || item.pos === filterPos;
+                return matchQuery && matchPos;
+            });
+            renderVocabGrid(filtered);
+        }
+
+        function toggleLearnVocab(id) {
+            if (appState.learnedVocab.includes(id)) {
+                appState.learnedVocab = appState.learnedVocab.filter(item => item !== id);
+            } else {
+                appState.learnedVocab.push(id);
+            }
+            localStorage.setItem('hsk1_l7_learned', JSON.stringify(appState.learnedVocab));
+            updateProgressDisplay();
+            renderVocabGrid();
+        }
+
+        // Flashcards Logic
+        let currentFcIndex = 0;
+        function openFlashcardModal() {
+            currentFcIndex = 0;
+            updateFlashcard();
+            document.getElementById('flashcard-modal').classList.remove('hidden');
+        }
+        function closeFlashcardModal() {
+            document.getElementById('flashcard-modal').classList.add('hidden');
+        }
+        function updateFlashcard() {
+            const item = vocabList[currentFcIndex];
+            const cardEl = document.getElementById('flashcard-card');
+            cardEl.classList.remove('flipped');
+            document.getElementById('fc-emoji').innerText = item.emoji;
+            document.getElementById('fc-hanzi').innerText = item.hanzi;
+            document.getElementById('fc-pinyin').innerText = item.pinyin;
+            document.getElementById('fc-pos').innerText = item.pos;
+            document.getElementById('fc-meaning').innerText = item.meaning;
+            document.getElementById('fc-counter').innerText = `${currentFcIndex + 1} / ${vocabList.length}`;
+        }
+        function nextFlashcard() {
+            currentFcIndex = (currentFcIndex + 1) % vocabList.length;
+            updateFlashcard();
+        }
+        function prevFlashcard() {
+            currentFcIndex = (currentFcIndex - 1 + vocabList.length) % vocabList.length;
+            updateFlashcard();
+        }
+
+        // Progress Tracking
+        function markSectionCompleted(sectionKey) {
+            if (!appState.completedSections.includes(sectionKey)) {
+                appState.completedSections.push(sectionKey);
+                localStorage.setItem('hsk1_l7_completed', JSON.stringify(appState.completedSections));
+                updateProgressDisplay();
+            }
+        }
+
+        function updateProgressDisplay() {
+            // Total items: 5 sections (dialogue, vocab, grammar, phonetics, exercises) + vocab learned ratio
+            const secCount = appState.completedSections.length;
+            const vocabCount = appState.learnedVocab.length;
+            
+            // Total score weight: 5 sections (each 15%) + 16 words learned (25%)
+            let progress = Math.min(100, Math.round((secCount / 5) * 75 + (vocabCount / 16) * 25));
+
+            document.getElementById('global-progress-text').innerText = `Tiến độ: ${progress}%`;
+            document.getElementById('overview-progress-num').innerText = `${progress}%`;
+            document.getElementById('summary-progress-percent').innerText = `${progress}%`;
+            document.getElementById('progress-bar-fill').style.width = `${progress}%`;
+        }
+
+        function resetProgress() {
+            appState.completedSections = [];
+            appState.learnedVocab = [];
+            localStorage.removeItem('hsk1_l7_completed');
+            localStorage.removeItem('hsk1_l7_learned');
+            updateProgressDisplay();
+            renderVocabGrid();
+            showAlert('Đã đặt lại tiến độ học tập thành công!');
+        }
+
+        // Summary Table Rendering
+        function renderSummaryVocabTable() {
+            const tbody = document.getElementById('summary-vocab-table');
+            tbody.innerHTML = '';
+            vocabList.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-pastelBlue/20 hover:bg-lightBlue/20';
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-textSub">${item.id}</td>
+                    <td class="p-3 font-chinese font-bold text-lg text-textMain">${item.hanzi}</td>
+                    <td class="p-3 text-amber-600 font-semibold">${item.pinyin}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 bg-lightBlue text-blue-700 text-xs rounded-full font-semibold">${item.pos}</span></td>
+                    <td class="p-3 font-medium text-textMain">${item.meaning}</td>
+                    <td class="p-3 text-center"><button onclick="speakText('${item.hanzi}')" class="text-blue-500 hover:text-blue-700"><i class="fa-solid fa-volume-high"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ================= EXERCISES LOGIC =================
+        function renderExercises() {
+            // Ex 1: Matching
+            const ex1Container = document.getElementById('ex1-container');
+            const ex1Items = [
+                { hanzi: "馒头", answer: "Bánh màn thầu" },
+                { hanzi: "包子", answer: "Bánh bao" },
+                { hanzi: "米饭", answer: "Cơm trắng" },
+                { hanzi: "饺子", answer: "Sủi cảo" },
+                { hanzi: "面条", answer: "Mì sợi" },
+                { hanzi: "鸡蛋汤", answer: "Canh trứng" }
+            ];
+            ex1Container.innerHTML = '';
+            ex1Items.forEach((item, index) => {
+                ex1Container.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/30 space-y-2">
+                        <p class="font-chinese font-bold text-2xl text-textMain">${item.hanzi}</p>
+                        <select id="ex1-${index}" class="w-full bg-bgMain border border-pastelBlue/50 p-2 rounded-lg text-xs font-medium focus:outline-none">
+                            <option value="">-- Chọn nghĩa đúng --</option>
+                            <option value="Bánh màn thầu">Bánh màn thầu</option>
+                            <option value="Bánh bao">Bánh bao</option>
+                            <option value="Cơm trắng">Cơm trắng</option>
+                            <option value="Sủi cảo">Sủi cảo</option>
+                            <option value="Mì sợi">Mì sợi</option>
+                            <option value="Canh trứng">Canh trứng</option>
+                        </select>
+                    </div>
+                `;
+            });
+
+            // Ex 2: Multiple Choice (8 questions)
+            const ex2Container = document.getElementById('ex2-container');
+            const ex2Questions = [
+                { q: "1. 你吃______？", options: ["A. 什么", "B. 谁", "C. 哪儿", "D. 几个"], correct: 0 },
+                { q: "2. 我______一碗鸡蛋汤。", options: ["A. 吃", "B. 喝", "C. 去", "D. 是"], correct: 1 },
+                { q: "3. 你要______个？", options: ["A. 什么", "B. 谁", "C. 几", "D. 哪儿"], correct: 2 },
+                { q: "4. 这是______。", options: ["A. 饺子", "B. 哪儿", "C. 几个", "D. 中午"], correct: 0 },
+                { q: "5. 我______米饭。", options: ["A. 喝", "B. 吃", "C. 要吗", "D. 去"], correct: 1 },
+                { q: "6. ______是面条。", options: ["A. 那", "B. 几个", "C. 谁", "D. 什么"], correct: 0 },
+                { q: "7. 我不要啤酒，我______茶。", options: ["A. 吃", "B. 去", "C. 喝", "D. 要吗"], correct: 2 },
+                { q: "8. 我要一______鸡蛋汤。", options: ["A. 个", "B. 碗", "C. 本", "D. 张"], correct: 1 }
+            ];
+            ex2Container.innerHTML = '';
+            ex2Questions.forEach((item, idx) => {
+                let optionsHtml = '';
+                item.options.forEach((opt, oIdx) => {
+                    optionsHtml += `<label class="block text-xs text-textMain cursor-pointer"><input type="radio" name="ex2-${idx}" value="${oIdx}" class="mr-2 accent-pastelOrange"> ${opt}</label>`;
+                });
+                ex2Container.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/30 space-y-2">
+                        <p class="font-chinese font-bold text-base text-textMain">${item.q}</p>
+                        <div class="grid grid-cols-2 gap-2 mt-2">${optionsHtml}</div>
+                    </div>
+                `;
+            });
+
+            // Ex 3: Answer Questions
+            const ex3Container = document.getElementById('ex3-container');
+            const ex3Questions = [
+                { q: "1. 你去哪儿吃饭？", ref: "我去食堂吃饭。" },
+                { q: "2. 你吃什么？", ref: "我吃馒头 / 米饭。" },
+                { q: "3. 你吃几个馒头？", ref: "我吃一个馒头。" },
+                { q: "4. 你喝什么？", ref: "我喝鸡蛋汤 / 啤酒。" },
+                { q: "5. 你喝什么汤？", ref: "我喝鸡蛋汤。" },
+                { q: "6. 你要什么啤酒？", ref: "我要一瓶啤酒。" }
+            ];
+            ex3Container.innerHTML = '';
+            ex3Questions.forEach((item, idx) => {
+                ex3Container.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/20 space-y-2">
+                        <p class="font-chinese font-bold text-sm text-textMain">${item.q}</p>
+                        <input type="text" id="ex3-${idx}" placeholder="Nhập câu trả lời bằng tiếng Trung..." class="w-full bg-bgMain border border-pastelBlue/40 p-2 rounded-lg text-xs font-chinese focus:outline-none">
+                        <div class="flex justify-between items-center text-xs">
+                            <button onclick="document.getElementById('ex3-ref-${idx}').classList.toggle('hidden')" class="text-blue-600 font-semibold">Xem gợi ý</button>
+                            <span id="ex3-ref-${idx}" class="hidden text-amber-700 italic font-chinese">Gợi ý: ${item.ref}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Ex 5: Object Recognition
+            const ex5Container = document.getElementById('ex5-container');
+            const ex5Items = [
+                { name: "筷子 (Đũa)", emoji: "🥢", correct: "筷子" },
+                { name: "碗 (Bát)", emoji: "🥣", correct: "碗" },
+                { name: "电脑 (Máy tính)", emoji: "💻", correct: "电脑" },
+                { name: "手机 (Điện thoại)", emoji: "📱", correct: "手机" },
+                { name: "伞 (Ô, dù)", emoji: "🌂", correct: "伞" },
+                { name: "汽车 (Ô tô)", emoji: "🚗", correct: "汽车" }
+            ];
+            ex5Container.innerHTML = '';
+            ex5Items.forEach((item, idx) => {
+                ex5Container.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-pastelBlue/30 text-center space-y-2">
+                        <div class="text-3xl">${item.emoji}</div>
+                        <p class="text-xs font-bold text-textMain">${item.name}</p>
+                        <select id="ex5-${idx}" class="w-full bg-bgMain border border-pastelBlue/50 p-2 rounded-lg text-xs font-chinese focus:outline-none">
+                            <option value="">-- Chọn tên tiếng Trung --</option>
+                            <option value="筷子">筷子</option>
+                            <option value="碗">碗</option>
+                            <option value="电脑">电脑</option>
+                            <option value="手机">手机</option>
+                            <option value="伞">伞</option>
+                            <option value="汽车">汽车</option>
+                            <option value="书">书</option>
+                        </select>
+                    </div>
+                `;
+            });
+
+            // Ex 6: Reading questions
+            const ex6QContainer = document.getElementById('ex6-questions');
+            const ex6Questions = [
+                { q: "1. 玛丽去哪儿吃饭？", options: ["A. 教室", "B. 食堂", "C. 宿舍"], correct: 1 },
+                { q: "2. 麦克吃什么？", options: ["A. 馒头", "B. 米饭", "C. 包子"], correct: 1 },
+                { q: "3. 麦克喝什么？", options: ["A. 鸡蛋汤", "B. 啤酒", "C. 茶"], correct: 1 }
+            ];
+            ex6QContainer.innerHTML = '';
+            ex6Questions.forEach((item, idx) => {
+                let opts = '';
+                item.options.forEach((opt, oIdx) => {
+                    opts += `<label class="block text-xs text-textMain"><input type="radio" name="ex6-${idx}" value="${oIdx}" class="mr-2 accent-pastelOrange">${opt}</label>`;
+                });
+                ex6QContainer.innerHTML += `
+                    <div class="bg-bgMain p-3 rounded-lg border border-pastelBlue/20 space-y-1">
+                        <p class="font-chinese font-bold text-xs">${item.q}</p>
+                        <div class="grid grid-cols-3 gap-2 mt-1">${opts}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Checking Exercise Functions
+        function checkEx1() {
+            const ex1Items = [
+                { hanzi: "馒头", answer: "Bánh màn thầu" },
+                { hanzi: "包子", answer: "Bánh bao" },
+                { hanzi: "米饭", answer: "Cơm trắng" },
+                { hanzi: "饺子", answer: "Sủi cảo" },
+                { hanzi: "面条", answer: "Mì sợi" },
+                { hanzi: "鸡蛋汤", answer: "Canh trứng" }
+            ];
+            let correctCount = 0;
+            ex1Items.forEach((item, idx) => {
+                const val = document.getElementById(`ex1-${idx}`).value;
+                if (val === item.answer) correctCount++;
+            });
+            const res = document.getElementById('ex1-result');
+            res.innerText = `Kết quả: Đúng ${correctCount} / ${ex1Items.length} câu.`;
+            res.className = correctCount === ex1Items.length ? 'text-successGreen font-bold mt-2' : 'text-amber-600 font-bold mt-2';
+        }
+
+        function checkEx2() {
+            const correctAnswers = [0, 1, 2, 0, 1, 0, 2, 1];
+            let score = 0;
+            correctAnswers.forEach((ans, idx) => {
+                const selected = document.querySelector(`input[name="ex2-${idx}"]:checked`);
+                if (selected && parseInt(selected.value) === ans) score++;
+            });
+            const res = document.getElementById('ex2-result');
+            res.innerText = `Kết quả trắc nghiệm: Đúng ${score} / ${correctAnswers.length} câu.`;
+            res.className = score === correctAnswers.length ? 'text-successGreen font-bold mt-2' : 'text-amber-600 font-bold mt-2';
+        }
+
+        function checkEx4() {
+            const input = document.getElementById('ex4-input').value.trim();
+            const res = document.getElementById('ex4-result');
+            if (input === '你去哪儿吃饭？' || input === '你 去 哪 儿 吃 饭 ？' || input === '你去哪儿吃饭') {
+                res.innerText = 'Chính xác! Bạn thật giỏi.';
+                res.className = 'text-successGreen font-bold mt-2';
+            } else {
+                res.innerText = 'Chưa chính xác. Gợi ý: 你去哪儿吃饭？';
+                res.className = 'text-red-500 font-bold mt-2';
+            }
+        }
+
+        function checkEx5() {
+            const answers = ["筷子", "碗", "电脑", "手机", "伞", "汽车"];
+            let score = 0;
+            answers.forEach((ans, idx) => {
+                const val = document.getElementById(`ex5-${idx}`).value;
+                if (val === ans) score++;
+            });
+            const res = document.getElementById('ex5-result');
+            res.innerText = `Kết quả: Đúng ${score} / ${answers.length} đồ vật.`;
+            res.className = score === answers.length ? 'text-successGreen font-bold mt-2' : 'text-amber-600 font-bold mt-2';
+        }
+
+        function checkEx6() {
+            const correct = [1, 1, 1];
+            let score = 0;
+            correct.forEach((ans, idx) => {
+                const selected = document.querySelector(`input[name="ex6-${idx}"]:checked`);
+                if (selected && parseInt(selected.value) === ans) score++;
+            });
+            const res = document.getElementById('ex6-result');
+            res.innerText = `Kết quả đọc hiểu: Đúng ${score} / ${correct.length} câu.`;
+            res.className = score === correct.length ? 'text-successGreen font-bold mt-2' : 'text-amber-600 font-bold mt-2';
+        }
+    </script>
+</body>
+</html>
